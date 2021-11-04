@@ -1,0 +1,26 @@
+{
+  "name": "getir-consumer-generator",
+  "version": "1.0.0",
+  "description": "Nest Message Consumer Generator",
+  "main": "bin/index.js",
+  "bin": {
+    "getir-consumer-generator": "./bin/index.js"
+  },
+  "keywords": [
+    "message",
+    "consumer",
+    "generator",
+    "nestjs"
+  ],
+  "author": "Getir",
+  "license": "ISC",
+  "dependencies": {
+    "cli-progress": "^3.9.1",
+    "inquirer": "^8.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2"
+  }
+}
