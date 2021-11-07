@@ -6,7 +6,7 @@ const { SingleBar, Presets } = require('cli-progress');
 
 const questions = require('./questions');
 const {
-  copyFilesAndFolders,
+  copyFolder,
   changeProjectNameAndDescription,
   installMessageBrokerPlugin,
 } = require('./utils');
@@ -29,7 +29,7 @@ inquirer
     const nestTemplatePath = path.join(__dirname, '../nest-template');
     const destinationPath = path.join(process.cwd(), answers.projectName);
 
-    copyFilesAndFolders(nestTemplatePath, destinationPath);
+    copyFolder(nestTemplatePath, destinationPath);
     progressBar.update(30);
 
     installMessageBrokerPlugin[answers.messageBroker](destinationPath);

@@ -1,9 +1,9 @@
 const fs = require('fs');
 const shell = require('child_process').execSync;
 
-const copyFilesAndFolders = (src, dist) => {
-  shell(`mkdir -p ${dist}`);
-  shell(`cp -r ${src}/* ${dist}`);
+const copyFolder = (src, dest) => {
+  shell(`mkdir -p ${dest}`);
+  shell(`rsync -av --progress --exclude 'node_modules' ${src}/ ${dest}/`);
 };
 
 const changeProjectNameAndDescription = (dir, projectName, projectDescription) => {
@@ -26,7 +26,7 @@ const installKafkaPlugin = (dir) => {
 };
 
 module.exports = {
-  copyFilesAndFolders,
+  copyFolder,
   changeProjectNameAndDescription,
   installMessageBrokerPlugin: {
     rabbitmq: installRabbitMQPlugin,
