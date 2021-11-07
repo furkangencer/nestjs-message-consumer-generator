@@ -23,13 +23,15 @@ module.exports = [
     message: 'Which message broker do you want to work with?',
     choices: [
       {
-        name: 'NATS',
-      },
-      {
         name: 'RabbitMQ',
       },
       {
+        name: 'NATS',
+        disabled: 'Coming soon!',
+      },
+      {
         name: 'Kafka',
+        disabled: 'Coming soon!',
       },
     ],
     filter(val) {
@@ -45,7 +47,7 @@ module.exports = [
   {
     type: 'checkbox',
     name: 'tools',
-    message: 'Would you like to enable 3rd party integrations?',
+    message: 'What else would you like to have?',
     choices: [
       {
         name: 'Sentry',
