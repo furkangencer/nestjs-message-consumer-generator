@@ -9,7 +9,7 @@ const createProject = (src, dest, answers, callback) => {
     `rsync -av --progress --exclude 'node_modules' ${src}/ ${dest}/`,
   ];
   const messageBrokerPluginCommands = {
-    rabbitmq: `cd ${dest}/ && npm i --save amqplib amqp-connection-manager`,
+    rabbitmq: `cd ${dest}/ && npm i --save amqplib amqp-connection-manager @golevelup/nestjs-rabbitmq`,
     nats: `cd ${dest}/ && npm i --save nats`,
     kafka: `cd ${dest}/ && npm i --save kafkajs`,
   };
