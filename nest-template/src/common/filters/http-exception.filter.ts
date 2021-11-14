@@ -14,16 +14,37 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const status = exception?.getStatus?.() || HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const { error, message, code, constraints, property, data } =
-      exception?.response || ERROR_MESSAGES.UNKNOWN;
-
-    response.status(status).json({
-      code,
-      constraints,
+    const {
       error,
       message,
+      code,
+      constraints,
       property,
       data,
-    });
+      service,
+      isService,
+    } = exception?.response || ERROR_MESSAGES.UNKNOWN;
+
+    if (isService) {
+      response.status(status).json({
+        error: ERROR_MESSAGES.MICROSERVICE.error,
+        message: ERROR_MESSAGES.MICROSERVICE.message,
+        code: ERROR_MESSAGES.MICROSERVICE.code,
+        constraints,
+        property,
+        data,
+        service,
+        isService,
+      });
+    } else {
+      response.status(status).json({
+        code,
+        constraints,
+        error,
+        message,
+        property,
+        data,
+      });
+    }
   }
 }

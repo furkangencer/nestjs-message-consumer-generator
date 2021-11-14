@@ -9,11 +9,8 @@ import { ExampleConsumer } from './handler';
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const rabbitmqOptions = await configService.get('rabbitmq');
-
-        return rabbitmqOptions;
-      },
+      useFactory: (configService: ConfigService) =>
+        configService.get('rabbitmq'),
     }),
   ],
   providers: [ExampleConsumer],

@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
+import { HttpExceptionFilter } from './common/filters';
 import { config, configValidationSchema } from './config';
 import { ConsumerModule } from './consumer/consumer.module';
+import { ServiceCallerModule } from './service-caller/service-caller.module';
 
 @Module({
   imports: [
@@ -22,9 +25,20 @@ import { ConsumerModule } from './consumer/consumer.module';
         };
       },
     }),
+    ServiceCallerModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.get('services'),
+    }),
     ConsumerModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

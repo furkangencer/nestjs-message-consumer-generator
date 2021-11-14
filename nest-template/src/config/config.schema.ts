@@ -15,4 +15,6 @@ export const configValidationSchema = Joi.object().keys({
     .valid(...Object.values(LogLevel))
     .default(LogLevel.INFO),
   RABBITMQ_CONNECTION_URL: Joi.string().required(),
+  HTTP_TIMEOUT: Joi.number().default(10000),
+  EXAMPLE_SERVICE_URL: Joi.string().required(),
 });

@@ -1,4 +1,4 @@
-import { Environment } from '../common/enums';
+import { Environment, Service } from '../common/enums';
 
 export const config = () => ({
   env: process.env.NODE_ENV,
@@ -30,5 +30,11 @@ export const config = () => ({
     uri: process.env.RABBITMQ_CONNECTION_URL,
     connectionInitOptions: { wait: false },
     prefetchCount: 1,
+  },
+  services: {
+    urls: {
+      [Service.Example]: process.env.EXAMPLE_SERVICE_URL || '',
+    },
+    timeout: parseInt(process.env.HTTP_TIMEOUT, 10) || 10000,
   },
 });
