@@ -2,6 +2,8 @@ import { Environment, Service } from '../common/enums';
 
 export const config = () => ({
   env: process.env.NODE_ENV,
+  name: process.env.npm_package_name,
+  version: process.env.npm_package_version,
   port: parseInt(process.env.PORT, 10) || 3000,
   // database: {
   //   host: process.env.DB_HOST,
@@ -36,5 +38,12 @@ export const config = () => ({
       [Service.Example]: process.env.EXAMPLE_SERVICE_URL || '',
     },
     timeout: parseInt(process.env.HTTP_TIMEOUT, 10) || 10000,
+  },
+  sentry: {
+    dsn: process.env.SENTRY_DSN || '',
+    release:
+      process.env.SENTRY_RELEASE ||
+      `${process.env.npm_package_name}@${process.env.npm_package_version}`,
+    environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV,
   },
 });

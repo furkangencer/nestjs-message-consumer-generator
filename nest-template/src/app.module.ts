@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import { HttpExceptionFilter } from './common/filters';
+import { SentryInterceptor } from './common/interceptors';
 import { config, configValidationSchema } from './config';
 import { ConsumerModule } from './consumer/consumer.module';
 import { ServiceCallerModule } from './service-caller/service-caller.module';
@@ -38,6 +39,10 @@ import { ServiceCallerModule } from './service-caller/service-caller.module';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SentryInterceptor,
     },
   ],
 })

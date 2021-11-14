@@ -17,4 +17,9 @@ export const configValidationSchema = Joi.object().keys({
   RABBITMQ_CONNECTION_URL: Joi.string().required(),
   HTTP_TIMEOUT: Joi.number().default(10000),
   EXAMPLE_SERVICE_URL: Joi.string().required(),
+  SENTRY_DSN: Joi.string().required(),
+  SENTRY_RELEASE: Joi.string().default(''),
+  SENTRY_ENVIRONMENT: Joi.string()
+    .valid(...Object.values(Environment))
+    .default(Environment.DEVELOPMENT),
 });
