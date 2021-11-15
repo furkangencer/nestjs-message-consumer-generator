@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ExampleConsumer } from './handler';
+import { RabbitMQHealthIndicator } from './health/rabbit.health';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ExampleConsumer } from './handler';
         configService.get('rabbitmq'),
     }),
   ],
-  providers: [ExampleConsumer],
+  providers: [ExampleConsumer, RabbitMQHealthIndicator],
+  exports: [RabbitMQHealthIndicator],
 })
 export class ConsumerModule {}

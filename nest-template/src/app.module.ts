@@ -7,6 +7,8 @@ import { SentryInterceptor } from './common/interceptors';
 import { config, configValidationSchema } from './config';
 import { ConsumerModule } from './consumer/consumer.module';
 import { ServiceCallerModule } from './service-caller/service-caller.module';
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [
@@ -33,8 +35,9 @@ import { ServiceCallerModule } from './service-caller/service-caller.module';
         configService.get('services'),
     }),
     ConsumerModule,
+    TerminusModule,
   ],
-  controllers: [],
+  controllers: [HealthController],
   providers: [
     {
       provide: APP_FILTER,
