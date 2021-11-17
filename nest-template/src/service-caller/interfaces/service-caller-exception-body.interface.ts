@@ -3,5 +3,4 @@ export interface IServiceCallerExceptionBody {
   message?: string;
   code?: number;
   data?: any;
-  isService?: boolean;
 }

@@ -14,15 +14,17 @@ export class HttpRequestLoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const { originalUrl, method, headers, params, body, query } = req;
     if (this.configService.get('env') !== Environment.TEST) {
-      this.logger.info({
-        headers,
-        params,
-        body,
-        query,
-        method,
-        url: originalUrl,
-        type: '[REQUEST]',
-      });
+      this.logger.info(
+        {
+          headers,
+          params,
+          body,
+          query,
+          method,
+          url: originalUrl,
+        },
+        '[Request]',
+      );
     }
     next();
   }

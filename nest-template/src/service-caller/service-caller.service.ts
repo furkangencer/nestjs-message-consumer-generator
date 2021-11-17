@@ -33,45 +33,52 @@ export class ServiceCallerService {
         return Promise.reject(err);
       },
     );
-    axios.interceptors.response.use((response) => {
-      const { config, data, status } = response;
-      const endedAt = new Date();
-      config['metadata'] = { ...config['metadata'], endedAt };
-
-      const startedAt = config['metadata'].startedAt;
-      const duration = endedAt.getTime() - startedAt.getTime();
-
-      const { method, url } = config;
-
-      this.logger.debug(
-        {
-          service: config['metadata'].service,
-          method,
-          url,
-          startedAt,
-          duration,
+    axios.interceptors.response.use(
+      (response) => {
+        const {
+          config: {
+            method,
+            url,
+            metadata: { service, startedAt },
+          },
+          data: { message, code, data },
           status,
-          response: data,
-        },
-        '[ServiceCallerResponse]',
-      );
+        }: any = response;
 
-      if (status === 200) {
-        return response;
-      }
+        const duration = new Date().getTime() - startedAt.getTime();
 
-      return Promise.reject({
-        service: config['metadata'].service,
-        message: data['message'] || 'Microservice error!',
-        isService: true,
-        ...(data['code']
-          ? {
-              code: data['code'],
-              data: data['data'],
-            }
-          : undefined),
-      });
-    });
+        this.logger.debug(
+          {
+            service,
+            method,
+            url,
+            startedAt,
+            duration,
+            status,
+            response: data,
+          },
+          '[ServiceCallerResponse]',
+        );
+
+        if (status === 200) {
+          return response;
+        }
+
+        return Promise.reject({
+          service,
+          message: message || 'Microservice error!',
+          code,
+          data,
+        });
+      },
+      (err) => {
+        return Promise.reject({
+          service: err?.config?.metadata?.service,
+          message: err?.message || 'Microservice error!',
+          code: err?.code,
+        });
+      },
+    );
   }
 
   public async call({
@@ -95,11 +102,13 @@ export class ServiceCallerService {
         headers: { ...headers, service },
         timeout,
         validateStatus: () => true,
+        transitional: {
+          clarifyTimeoutError: true,
+        },
       })
       .pipe(map((res) => res.data));
 
     return lastValueFrom(response).catch((err) => {
-      this.logger.error(err, '[ServiceCallerError]');
       throw new ServiceCallerException(err);
     });
   }

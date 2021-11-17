@@ -5,6 +5,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { Service } from '../../common/enums';
 import { ServiceCallerService } from '../../service-caller/service-caller.service';
 import { EXAMPLE_HANDLER_CONFIG } from '../config';
+import { IExampleMessage } from '../interfaces';
 
 @Injectable()
 export class ExampleConsumer {
@@ -16,7 +17,7 @@ export class ExampleConsumer {
   }
 
   @RabbitSubscribe(EXAMPLE_HANDLER_CONFIG)
-  public async handler(msg: Record<string, unknown>, amqpMsg: ConsumeMessage) {
+  public async handler(msg: IExampleMessage, amqpMsg: ConsumeMessage) {
     try {
       this.logger.info({ msg });
       // this.logger.info({ msgFields: amqpMsg.fields });
@@ -25,13 +26,12 @@ export class ExampleConsumer {
         service: Service.Example,
         method: 'POST',
         path: 'example',
-        data: msg,
+        data: msg as Record<string, any>,
         headers: { test: '123' },
         params: { test: 123 },
       });
     } catch (error) {
-      // this.logger.error(error);
-      return new Nack(false);
+      return new Nack();
     }
   }
 }

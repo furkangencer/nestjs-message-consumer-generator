@@ -1,13 +1,17 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { TerminusModule } from '@nestjs/terminus';
 import { LoggerModule } from 'nestjs-pino';
+import { HttpRequestLoggerMiddleware } from './common/middlewares';
 import { HttpExceptionFilter } from './common/filters';
-import { SentryInterceptor } from './common/interceptors';
+import {
+  HttpResponseLoggerInterceptor,
+  SentryInterceptor,
+} from './common/interceptors';
 import { config, configValidationSchema } from './config';
 import { ConsumerModule } from './consumer/consumer.module';
 import { ServiceCallerModule } from './service-caller/service-caller.module';
-import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health/health.controller';
 
 @Module({
@@ -47,6 +51,14 @@ import { HealthController } from './health/health.controller';
       provide: APP_INTERCEPTOR,
       useClass: SentryInterceptor,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpResponseLoggerInterceptor,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HttpRequestLoggerMiddleware).forRoutes(HealthController);
+  }
+}
