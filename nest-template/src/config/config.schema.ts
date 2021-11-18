@@ -6,11 +6,7 @@ export const configValidationSchema = Joi.object().keys({
     .valid(...Object.values(Environment))
     .default(Environment.DEVELOPMENT),
   PORT: Joi.number().default(3000),
-  // DB_HOST: Joi.string().required(),
-  // DB_PORT: Joi.number().required(),
-  // DB_USERNAME: Joi.string().required(),
-  // DB_PASSWORD: Joi.string().required(),
-  // DB_DATABASE: Joi.string().required(),
+  MONGODB_URI: Joi.string(),
   LOG_LEVEL: Joi.string()
     .valid(...Object.values(LogLevel))
     .default(LogLevel.INFO),

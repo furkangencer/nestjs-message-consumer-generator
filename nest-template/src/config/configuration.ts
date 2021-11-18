@@ -5,15 +5,12 @@ export const config = () => ({
   name: process.env.npm_package_name,
   version: process.env.npm_package_version,
   port: parseInt(process.env.PORT, 10) || 3000,
-  // database: {
-  //   host: process.env.DB_HOST,
-  //   port: parseInt(process.env.DB_PORT, 10) || 5432,
-  //   name: process.env.DB_DATABASE,
-  //   username: process.env.DB_USERNAME,
-  //   password: process.env.DB_PASSWORD,
-  //   sync: process.env.NODE_ENV === Environment.DEVELOPMENT,
-  //   ssl: process.env.NODE_ENV === Environment.PRODUCTION,
-  // },
+  database: {
+    uri: process.env.MONGODB_URI,
+    useNewUrlParser: true,
+    autoIndex: false,
+    maxPoolSize: 10,
+  },
   logger: {
     level: process.env.LOG_LEVEL,
     prettyPrint: process.env.NODE_ENV !== Environment.PRODUCTION,

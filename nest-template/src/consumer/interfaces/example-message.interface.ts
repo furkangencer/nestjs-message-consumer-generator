@@ -1,2 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IExampleMessage {}
+export interface IExampleMessage {
+  title: string;
+  content?: string;
+}

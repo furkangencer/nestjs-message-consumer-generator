@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
+import { MongooseModule } from '@nestjs/mongoose';
 import { LoggerModule } from 'nestjs-pino';
 import { AsyncHooksModule } from '@nestjs-steroids/async-context';
 import {
@@ -20,11 +21,15 @@ import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [
+    AsyncHooksModule,
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       validationSchema: configValidationSchema,
       load: [config],
       cache: true,
+      validationOptions: {
+        allowUnknown: true,
+      },
     }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
@@ -36,7 +41,12 @@ import { HealthController } from './health/health.controller';
         };
       },
     }),
-    AsyncHooksModule,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) =>
+        configService.get('database'),
+    }),
     ServiceCallerModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
