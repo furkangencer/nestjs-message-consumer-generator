@@ -20,7 +20,7 @@ export class HttpResponseLoggerInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler) {
     const req = context.switchToHttp().getRequest();
     const { statusCode: status } = context.switchToHttp().getResponse();
-    const { originalUrl, method } = req;
+    const { originalUrl: path, method, headers } = req;
 
     const canShowLog =
       this.configService.get('env') !== Environment.TEST &&
@@ -35,7 +35,10 @@ export class HttpResponseLoggerInterceptor implements NestInterceptor {
                 response: val,
                 status,
                 method,
-                url: originalUrl,
+                path,
+                requestId: headers['x-request-id'],
+                elapsed: Date.now() - headers['x-req-start'],
+                remoteAdress: headers['x-forwarded-for'],
               },
               '[Response]',
             );
@@ -49,7 +52,7 @@ export class HttpResponseLoggerInterceptor implements NestInterceptor {
                 response,
                 status,
                 method,
-                url: originalUrl,
+                path,
               },
               '[Error]',
             );

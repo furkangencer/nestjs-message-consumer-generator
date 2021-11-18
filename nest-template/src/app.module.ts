@@ -3,7 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TerminusModule } from '@nestjs/terminus';
 import { LoggerModule } from 'nestjs-pino';
-import { HttpRequestLoggerMiddleware } from './common/middlewares';
+import { AsyncHooksModule } from '@nestjs-steroids/async-context';
+import {
+  HttpRequestIdMiddleware,
+  HttpRequestLoggerMiddleware,
+} from './common/middlewares';
 import { HttpExceptionFilter } from './common/filters';
 import {
   HttpResponseLoggerInterceptor,
@@ -32,6 +36,7 @@ import { HealthController } from './health/health.controller';
         };
       },
     }),
+    AsyncHooksModule,
     ServiceCallerModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -59,6 +64,8 @@ import { HealthController } from './health/health.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HttpRequestLoggerMiddleware).forRoutes(HealthController);
+    consumer
+      .apply(HttpRequestIdMiddleware, HttpRequestLoggerMiddleware)
+      .forRoutes(HealthController);
   }
 }

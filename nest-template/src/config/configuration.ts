@@ -24,8 +24,11 @@ export const config = () => ({
     },
     autoLogging: false,
     quietReqLogger: true,
-    base: {
-      pid: undefined,
+    base: undefined,
+    timestamp: () => `,"time":"${new Date(Date.now()).toISOString()}"`,
+    genReqId: (req) => req.headers['x-request-id'],
+    customAttributeKeys: {
+      reqId: 'requestId',
     },
   },
   rabbitmq: {

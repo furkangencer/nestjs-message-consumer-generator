@@ -1,7 +1,7 @@
 import { Method } from 'axios';
 import { Service } from '../../common/enums';
 
-export interface IAxiosRequest {
+export interface IServiceCallerRequest {
   service: Service;
   path: string;
   method: Method;
