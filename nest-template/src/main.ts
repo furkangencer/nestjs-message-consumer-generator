@@ -13,6 +13,7 @@ async function bootstrap() {
   const sentryConfig = configService.get('sentry');
   Sentry.init(sentryConfig);
 
+  app.enableShutdownHooks();
   await app.listen(port);
 }
 bootstrap();
