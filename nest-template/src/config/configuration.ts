@@ -7,9 +7,11 @@ export const config = () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   database: {
     uri: process.env.MONGODB_URI,
+    useUnifiedTopology: true,
     useNewUrlParser: true,
     autoIndex: false,
-    maxPoolSize: 10,
+    maxPoolSize: process.env.MONGODB_MAX_POOL_SIZE,
+    serverSelectionTimeoutMS: process.env.MONGODB_SERVER_SELECTION_TIMEOUT,
   },
   logger: {
     level: process.env.LOG_LEVEL,
