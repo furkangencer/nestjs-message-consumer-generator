@@ -22,7 +22,6 @@ export class ExampleConsumer {
   public async handler(msg: IExampleMessage, amqpMsg: ConsumeMessage) {
     try {
       this.logger.info({ msg });
-      // this.logger.info({ msgFields: amqpMsg.fields });
 
       await this.serviceCaller.call({
         service: Service.Example,
