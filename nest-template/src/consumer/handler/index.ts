@@ -5,7 +5,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { Service } from '../../common/enums';
 import { ServiceCallerService } from '../../service-caller/service-caller.service';
 import { EXAMPLE_HANDLER_CONFIG } from '../config';
-import { ExampleDataAccess } from '../data-access/example.data-access';
+import { ExampleRepository } from '../repositories';
 import { IExampleMessage } from '../interfaces';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ExampleConsumer {
   constructor(
     private readonly serviceCaller: ServiceCallerService,
     private readonly logger: PinoLogger,
-    private readonly exampleDataAccess: ExampleDataAccess,
+    private readonly exampleRepository: ExampleRepository,
   ) {
     this.logger.setContext(ExampleConsumer.name);
   }
@@ -32,7 +32,7 @@ export class ExampleConsumer {
         params: { test: 123 },
       });
 
-      const result = await this.exampleDataAccess.create(msg);
+      const result = await this.exampleRepository.create(msg);
 
       this.logger.info({ result });
     } catch (error) {

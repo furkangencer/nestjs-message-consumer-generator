@@ -5,7 +5,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ExampleConsumer } from './handler';
 import { RabbitMQHealthIndicator } from './health/rabbit.health';
 import { Example, ExampleSchema } from './schemas/example.schema';
-import { ExampleDataAccess } from './data-access/example.data-access';
+import { ExampleRepository } from './repositories';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { ExampleDataAccess } from './data-access/example.data-access';
     }),
     MongooseModule.forFeature([{ name: Example.name, schema: ExampleSchema }]),
   ],
-  providers: [ExampleConsumer, RabbitMQHealthIndicator, ExampleDataAccess],
+  providers: [ExampleConsumer, RabbitMQHealthIndicator, ExampleRepository],
   exports: [RabbitMQHealthIndicator],
 })
 export class ConsumerModule {}

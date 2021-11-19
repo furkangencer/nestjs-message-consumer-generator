@@ -6,7 +6,7 @@ import { IExampleMessage } from '../interfaces';
 import { Example, ExampleDocument } from '../schemas';
 
 @Injectable()
-export class ExampleDataAccess {
+export class ExampleRepository {
   constructor(
     @InjectModel(Example.name) private exampleModel: Model<ExampleDocument>,
   ) {}
