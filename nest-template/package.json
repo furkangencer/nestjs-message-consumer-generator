@@ -38,6 +38,7 @@
     "joi": "^17.4.2",
     "mongoose": "^6.0.13",
     "nestjs-pino": "^2.2.0",
+    "newrelic": "^8.6.0",
     "pino-http": "^5.8.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

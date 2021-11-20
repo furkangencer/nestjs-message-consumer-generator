@@ -20,4 +20,8 @@ export const configValidationSchema = Joi.object().keys({
   SENTRY_ENVIRONMENT: Joi.string()
     .valid(...Object.values(Environment))
     .default(Environment.DEVELOPMENT),
+  NEW_RELIC_APP_NAME: Joi.string(),
+  NEW_RELIC_LICENSE_KEY: Joi.string().default(''),
+  NEW_RELIC_ENABLED: Joi.boolean().default(false),
+  NEW_RELIC_VERSION: Joi.string(),
 });
