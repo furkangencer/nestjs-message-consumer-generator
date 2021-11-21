@@ -10,16 +10,20 @@ import { RabbitMQHealthIndicator } from '../consumer/health/rabbit.health';
 export class HealthController {
   constructor(
     private health: HealthCheckService,
-    private rabbitmqHealthIndicator: RabbitMQHealthIndicator,
-    private db: MongooseHealthIndicator,
+    private rabbitmq: RabbitMQHealthIndicator,
+    private mongodb: MongooseHealthIndicator,
   ) {}
 
   @Get()
   @HealthCheck()
-  check() {
-    return this.health.check([
-      () => this.rabbitmqHealthIndicator.isHealthy(),
-      () => this.db.pingCheck('MongoDB'),
+  async check() {
+    const health = await this.health.check([
+      () => this.rabbitmq.isHealthy(),
+      () => this.mongodb.pingCheck('MongoDB'),
     ]);
+    return {
+      time: Date.now(),
+      ...health,
+    };
   }
 }
