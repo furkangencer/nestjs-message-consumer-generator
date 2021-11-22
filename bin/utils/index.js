@@ -2,30 +2,31 @@ const fs = require('fs');
 const spawn = require('child_process').spawn;
 
 const createProject = (src, dest, answers, callback) => {
-  const { messageBroker, projectName, projectDescription } = answers;
+  const { messageBroker, mongoose, projectName, projectDescription } = answers;
 
   const commands = [
     `mkdir -p ${dest}`,
-    `rsync -av --progress --exclude 'node_modules' ${src}/ ${dest}/`,
+    `rsync -av --progress --exclude 'node_modules' --exclude 'dist' ${src}/ ${dest}/`,
   ];
-  const messageBrokerPluginCommands = {
-    rabbitmq: `cd ${dest}/ && npm i --save amqplib amqp-connection-manager @golevelup/nestjs-rabbitmq`,
-    nats: `cd ${dest}/ && npm i --save nats`,
-    kafka: `cd ${dest}/ && npm i --save kafkajs`,
-  };
-
-  commands.push(messageBrokerPluginCommands[messageBroker]);
 
   var process = spawn(commands.join(' && '), {
     shell: true,
   });
 
   process.on('exit', async () => {
-    await changeProjectNameAndDescription(
-      dest,
-      projectName,
-      projectDescription,
-    );
+    await changeProjectNameAndDescription(dest, projectName, projectDescription);
+    if (!mongoose) {
+      removeMongoose(dest);
+    }
+    npmInstall(dest, callback);
+  });
+};
+
+const npmInstall = (dest, callback) => {
+  const process = spawn(`cd ${dest}/ && npm install`, {
+    shell: true,
+  });
+  process.on('exit', () => {
     callback();
   });
 };
@@ -52,6 +53,37 @@ const changeProjectNameAndDescription = (
       });
     });
   });
+};
+
+const removeMongoose = (dest) => {
+  fs.rm(`${dest}/src/consumer/repositories`, { recursive: true, force: true }, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+  fs.rm(`${dest}/src/consumer/schemas`, { recursive: true, force: true }, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+  fs.copyFile(
+    `${__dirname}/../assets/consumer/consumer.module.ts`,
+    `${dest}/src/consumer/consumer.module.ts`,
+    (err) => {
+      if (err) {
+        throw err;
+      }
+    }
+  );
+  let packageJson = fs.readFileSync(`${dest}/package.json`, 'utf8');
+  packageJson = packageJson
+    .split('\n')
+    .filter((line) => {
+      return line.indexOf('mongoose') == -1;
+    })
+    .join('\n');
+
+  fs.writeFileSync(`${dest}/package.json`, packageJson, 'utf8');
 };
 
 module.exports = {

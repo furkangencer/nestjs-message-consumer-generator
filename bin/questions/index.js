@@ -25,14 +25,6 @@ module.exports = [
       {
         name: 'RabbitMQ',
       },
-      {
-        name: 'NATS',
-        disabled: 'Coming soon!',
-      },
-      {
-        name: 'Kafka',
-        disabled: 'Coming soon!',
-      },
     ],
     filter(val) {
       return val.toLowerCase();
@@ -40,24 +32,9 @@ module.exports = [
   },
   {
     type: 'confirm',
-    name: 'typeOrm',
-    message: 'Do you want to use TypeORM?',
+    name: 'mongoose',
+    message: 'Do you want to use Mongoose?',
     default: false,
-  },
-  {
-    type: 'checkbox',
-    name: 'tools',
-    message: 'What else would you like to have?',
-    choices: [
-      {
-        name: 'Sentry',
-        value: 'sentry',
-      },
-      {
-        name: 'New Relic',
-        value: 'newrelic',
-      },
-    ],
   },
   {
     type: 'input',
