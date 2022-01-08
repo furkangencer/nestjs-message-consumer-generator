@@ -1,10 +1,10 @@
 {
-  "name": "getir-consumer-generator",
+  "name": "nestjs-message-consumer-generator",
   "version": "1.0.0",
-  "description": "Nest Message Consumer Generator",
+  "description": "NestJS Message Consumer Generator",
   "main": "bin/index.js",
   "bin": {
-    "getir-consumer-generator": "./bin/index.js"
+    "message-consumer-generator": "./bin/index.js"
   },
   "keywords": [
     "message",
