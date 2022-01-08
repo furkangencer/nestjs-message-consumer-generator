@@ -14,7 +14,7 @@ A handy generator with interactive CLI to create boilerplate <b>message consumer
 Currently, it only supports RabbitMQ as message broker.
 
 ### Preview
-<img src="https://user-images.githubusercontent.com/20465844/148654803-ee9834b7-4cf3-4ec6-b928-b4dce9073234.gif" width="504" height="208"/>
+<img src="https://user-images.githubusercontent.com/20465844/148655555-8454ee3d-1382-4344-bc53-4171c5cb8ac3.gif" width="463" height="135"/>
 
 ### Installation
 
